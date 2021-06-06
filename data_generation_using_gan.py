@@ -17,8 +17,8 @@ import os
 import time
 import matplotlib.pyplot as plt
 
-from google.colab import drive
-drive.mount('/content/drive')
+# from google.colab import drive
+# drive.mount('/content/drive')
 
 GENERATE_RES = 3 # Generation resolution factor 
 # (1=32, 2=64, 3=96, 4=128, etc.)
@@ -34,7 +34,7 @@ PREVIEW_MARGIN = 16
 SEED_SIZE = 100
 
 # Configuration
-DATA_PATH = '/content/drive/MyDrive/cars/images'
+DATA_PATH = './images'
 EPOCHS = 50
 BATCH_SIZE = 32
 BUFFER_SIZE = 60000
@@ -57,12 +57,21 @@ if not os.path.isfile(training_binary_path):
   print("Loading training images...")
 
   training_data = []
-  faces_path = os.path.join(DATA_PATH)
-  for filename in tqdm(os.listdir(faces_path)):
-      path = os.path.join(faces_path,filename)
-      image = Image.open(path).resize((GENERATE_SQUARE,
-            GENERATE_SQUARE),Image.ANTIALIAS)
-      training_data.append(np.asarray(image))
+  images_path = os.path.join(DATA_PATH)
+  for filename in tqdm(os.listdir(images_path)):
+    extension = filename.split(".")[-1]
+    if extension == "jpg":
+      try:
+        print('loading: '+ filename)
+        path = os.path.join(images_path,filename)
+        image = Image.open(path).resize((GENERATE_SQUARE,
+              GENERATE_SQUARE),Image.ANTIALIAS)
+        training_data.append(np.asarray(image))
+      except:
+        print('failed: '+ filename)
+    else:
+      print('Ignoring: '+ filename)
+  print("Reshaping images...")
   training_data = np.reshape(training_data,(-1,GENERATE_SQUARE,
             GENERATE_SQUARE,IMAGE_CHANNELS))
   training_data = training_data.astype(np.float32)
