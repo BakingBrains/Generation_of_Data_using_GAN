@@ -61,11 +61,14 @@ if not os.path.isfile(training_binary_path):
   for filename in tqdm(os.listdir(images_path)):
     extension = filename.split(".")[-1]
     if extension == "jpg":
-      print('loading: '+ filename)
-      path = os.path.join(images_path,filename)
-      image = Image.open(path).resize((GENERATE_SQUARE,
-            GENERATE_SQUARE),Image.ANTIALIAS)
-      training_data.append(np.asarray(image))
+      try:
+        print('loading: '+ filename)
+        path = os.path.join(images_path,filename)
+        image = Image.open(path).resize((GENERATE_SQUARE,
+              GENERATE_SQUARE),Image.ANTIALIAS)
+        training_data.append(np.asarray(image))
+      except:
+        print('failed: '+ filename)
     else:
       print('Ignoring: '+ filename)
   print("Reshaping images...")
