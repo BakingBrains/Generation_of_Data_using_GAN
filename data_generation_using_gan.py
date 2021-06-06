@@ -2,6 +2,10 @@
 Name: Syed
 """
 
+# If we're using gpus need this first:
+import os
+os.add_dll_directory("C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/bin")
+
 import tensorflow as tf
 from tensorflow.keras.layers import Input, Reshape, Dropout, Dense 
 from tensorflow.keras.layers import Flatten, BatchNormalization
@@ -261,7 +265,7 @@ def train(dataset, epochs):
 
     epoch_elapsed = time.time()-epoch_start
     print (f'Epoch {epoch+1}, gen loss={g_loss},disc loss={d_loss},'\
-           ' {hms_string(epoch_elapsed)}')
+           f' {hms_string(epoch_elapsed)}')
     save_images(epoch,fixed_seed)
 
   elapsed = time.time()-start
